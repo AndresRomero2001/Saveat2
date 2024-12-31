@@ -304,7 +304,7 @@
                         <div class="flex justify-between items-center mb-4">
                             <h2 class="text-lg font-semibold">{{ __('Create Tag') }}</h2>
                             <button wire:click="$set('showCreateTagModal', false)">
-                                <img src="{{ asset('icons/delete.svg') }}" alt="Close" class="w-6 h-6">
+                                <img src="{{ asset('app-icons/delete.svg') }}" alt="Close" class="w-6 h-6">
                             </button>
                         </div>
 

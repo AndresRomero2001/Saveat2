@@ -3,11 +3,11 @@
         <div class="flex gap-1">
             @for ($i = 1; $i <= 5; $i++)
                 @if ($i <= floor($value))
-                    <img src="{{ asset('icons/star-yellow.svg') }}" alt="★" class="w-6 h-6">
+                    <img src="{{ asset('app-icons/star-yellow.svg') }}" alt="★" class="w-6 h-6">
                 @elseif ($i - 0.5 == $value)
-                    <img src="{{ asset('icons/star-half.svg') }}" alt="★" class="w-6 h-6">
+                    <img src="{{ asset('app-icons/star-half.svg') }}" alt="★" class="w-6 h-6">
                 @else
-                    <img src="{{ asset('icons/star-gray.svg') }}" alt="★" class="w-6 h-6">
+                    <img src="{{ asset('app-icons/star-gray.svg') }}" alt="★" class="w-6 h-6">
                 @endif
             @endfor
         </div>

@@ -10,7 +10,7 @@
             <div class="bg-white overflow-hidden shadow-sm rounded-lg">
                 <div class="p-6 text-center">
                     <img
-                        src="{{ asset('icons/icon-192x192.png') }}"
+                        src="{{ asset('app-icons/icon-192x192.png') }}"
                         alt="Saveat"
                         class="w-24 h-24 mx-auto mb-6"
                     >

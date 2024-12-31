@@ -8,7 +8,7 @@
             class="text-gray-500 hover:text-primary-blue focus:outline-none rounded-lg"
         >
             <img
-                src="{{ asset($showOnlyUserTags ? 'icons/user-tag.svg' : 'icons/user-tag-outline.svg') }}"
+                src="{{ asset($showOnlyUserTags ? 'app-icons/user-tag.svg' : 'app-icons/user-tag-outline.svg') }}"
                 alt="{{ $showOnlyUserTags ? __('Show all tags') : __('Show only my tags') }}"
                 class="w-8 h-8"
             >
@@ -20,7 +20,7 @@
             class="text-gray-500 hover:text-primary-blue focus:outline-none rounded-lg"
         >
             <img
-                src="{{ asset($showOnlyLocations ? 'icons/location.svg' : 'icons/location-outline.svg') }}"
+                src="{{ asset($showOnlyLocations ? 'app-icons/location.svg' : 'app-icons/location-outline.svg') }}"
                 alt="{{ $showOnlyLocations ? __('Show all tags') : __('Show only locations') }}"
                 class="w-8 h-8"
             >

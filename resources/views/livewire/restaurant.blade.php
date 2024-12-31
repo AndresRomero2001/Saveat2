@@ -17,7 +17,7 @@
                 @if($restaurant->rating)
                     <div class="flex items-center justify-end gap-1 mt-1">
                         <span class="text-sm font-medium text-gray-primary">{{ number_format($restaurant->rating, 1) }}</span>
-                        <img src="{{ asset('icons/star-yellow.svg') }}" alt="Rating" class="w-5 h-5">
+                        <img src="{{ asset('app-icons/star-yellow.svg') }}" alt="Rating" class="w-5 h-5">
                     </div>
                 @endif
             </div>
@@ -31,7 +31,7 @@
             <div class="mt-3 flex flex-col gap-2">
                 @if($locationTags->isNotEmpty())
                     <div class="flex items-start gap-2">
-                        <img src="{{ asset('icons/location-outline.svg') }}" alt="Location" class="w-4 h-4 mt-1">
+                        <img src="{{ asset('app-icons/location-outline.svg') }}" alt="Location" class="w-4 h-4 mt-1">
                         <div class="flex flex-wrap gap-1">
                             @foreach($locationTags as $tag)
                                 <x-tag :tag="$tag" mode="readonly"/>
@@ -42,7 +42,7 @@
 
                 @if($otherTags->isNotEmpty())
                     <div class="flex items-start gap-2">
-                        <img src="{{ asset('icons/tag-outline.svg') }}" alt="Tags" class="w-4 h-4 mt-1">
+                        <img src="{{ asset('app-icons/tag-outline.svg') }}" alt="Tags" class="w-4 h-4 mt-1">
                         <div class="flex flex-wrap gap-1">
                             @foreach($otherTags as $tag)
                                 <x-tag :tag="$tag" mode="readonly"/>

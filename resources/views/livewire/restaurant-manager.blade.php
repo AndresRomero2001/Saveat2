@@ -6,7 +6,7 @@
             class="text-gray-500 hover:text-primary-blue focus:outline-none rounded-lg"
         >
             <img
-                src="{{ asset($this->isUsingDefaultFilters() ? 'icons/user-filters.svg' : 'icons/user-filters-outline.svg') }}"
+                src="{{ asset($this->isUsingDefaultFilters() ? 'app-icons/user-filters.svg' : 'app-icons/user-filters-outline.svg') }}"
                 alt="{{ $this->isUsingDefaultFilters() ? 'Remove default filters' : 'Apply default filters' }}"
                 class="w-7 h-7"
             >
@@ -16,7 +16,7 @@
             class="text-gray-500 hover:text-primary-blue focus:outline-none rounded-lg"
         >
             <img
-                src="{{ asset($this->hasActiveFilters() ? 'icons/filter.svg' : 'icons/filter-outline.svg') }}"
+                src="{{ asset($this->hasActiveFilters() ? 'app-icons/filter.svg' : 'app-icons/filter-outline.svg') }}"
                 alt="{{ $this->hasActiveFilters() ? 'Active filters' : 'Filter' }}"
                 class="w-7 h-7"
             >
@@ -38,7 +38,7 @@
                         <div class="flex justify-between items-center mb-4">
                             <h2 class="text-lg font-semibold">{{ __('Filters') }}</h2>
                             <button wire:click="$toggle('showFilters')">
-                                <img src="{{ asset('icons/delete.svg') }}" alt="Close" class="w-6 h-6">
+                                <img src="{{ asset('app-icons/delete.svg') }}" alt="Close" class="w-6 h-6">
                             </button>
                         </div>
 
