@@ -6,7 +6,7 @@ export default defineConfig({
         laravel({
             input: [
                 'resources/css/app.css',
-                'resources/js/app.js'
+                'resources/js/app.js',
             ],
             refresh: true,
         }),
@@ -14,5 +14,11 @@ export default defineConfig({
     build: {
         manifest: true,
         outDir: 'public/build',
-    }
+        emptyOutDir: true, // Clears old build files to prevent conflicts
+        rollupOptions: {
+            input: {
+                main: 'resources/js/app.js', // Main entry point
+            },
+        },
+    },
 });
