@@ -8,7 +8,7 @@ use App\Models\Restaurant;
 
 
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['web', 'auth', 'verified'])->group(function () {
     Route::get('/', [RestaurantController::class, 'index'])->name('restaurants.index');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

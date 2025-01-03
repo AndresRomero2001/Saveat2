@@ -55,17 +55,29 @@
 
         <!-- PWA Service Worker Registration -->
         <script>
-            if ('serviceWorker' in navigator) {
-                window.addEventListener('load', function() {
-                    navigator.serviceWorker.register('/sw.js')
-                        .then(function(registration) {
-                            console.log('ServiceWorker registration successful');
-                        })
-                        .catch(function(err) {
-                            console.log('ServiceWorker registration failed: ', err);
-                        });
-                });
-            }
+            @if(config('app.env') === 'local')
+                // Unregister service worker in development
+                if ('serviceWorker' in navigator) {
+                    navigator.serviceWorker.getRegistrations().then(function(registrations) {
+                        for(let registration of registrations) {
+                            registration.unregister();
+                        }
+                    });
+                }
+            @else
+                // Register service worker in production
+                if ('serviceWorker' in navigator) {
+                    window.addEventListener('load', function() {
+                        navigator.serviceWorker.register('/sw.js')
+                            .then(function(registration) {
+                                console.log('ServiceWorker registration successful');
+                            })
+                            .catch(function(err) {
+                                console.log('ServiceWorker registration failed: ', err);
+                            });
+                    });
+                }
+            @endif
         </script>
     </body>
 

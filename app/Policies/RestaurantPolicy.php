@@ -13,7 +13,7 @@ class RestaurantPolicy
      */
     public function viewAny(User $user): bool
     {
-        return false;
+        return true; // Allow authenticated users to view their restaurants index
     }
 
     /**
@@ -21,7 +21,7 @@ class RestaurantPolicy
      */
     public function view(User $user, Restaurant $restaurant): bool
     {
-        return false;
+        return $user->id === $restaurant->user_id;
     }
 
     /**
@@ -29,7 +29,7 @@ class RestaurantPolicy
      */
     public function create(User $user): bool
     {
-        return false;
+        return true;
     }
 
     /**

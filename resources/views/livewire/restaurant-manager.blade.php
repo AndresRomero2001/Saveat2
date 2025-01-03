@@ -6,8 +6,8 @@
             class="text-gray-500 hover:text-primary-blue focus:outline-none rounded-lg"
         >
             <img
-                src="{{ asset($this->isUsingDefaultFilters() ? 'app-icons/user-filters.svg' : 'app-icons/user-filters-outline.svg') }}"
-                alt="{{ $this->isUsingDefaultFilters() ? 'Remove default filters' : 'Apply default filters' }}"
+                src="{{ asset($this->applyingDefaultFilters ? 'app-icons/user-filters.svg' : 'app-icons/user-filters-outline.svg') }}"
+                alt="{{ $this->applyingDefaultFilters ? 'Remove default filters' : 'Apply default filters' }}"
                 class="w-7 h-7"
             >
         </button>

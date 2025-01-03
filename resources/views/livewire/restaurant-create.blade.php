@@ -1,13 +1,15 @@
 <div class="p-4 space-y-6">
     <form wire:submit="createRestaurant" class="space-y-4">
+        @csrf
+
         <div>
-            <label for="name" class="block text-sm font-medium text-gray-700">{{ __('Name') }}</label>
+            <label for="name" class="block text-sm font-medium text-gray-700">{{ __('Name') . "*"  }}</label>
             <input type="text" wire:model="name" id="name" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-blue focus:ring-primary-blue">
             @error('name') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
         </div>
 
         <div>
-            <label for="main_tag_id" class="block text-sm font-medium text-gray-700">{{ __('Main tag') }}</label>
+            <label for="main_tag_id" class="block text-sm font-medium text-gray-700">{{ __('Main tag') . "*" }}</label>
             <div class="relative mt-2">
                 <div class="relative">
                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -71,7 +73,7 @@
         </div>
 
         <div>
-            <label for="main_location_tag_id" class="block text-sm font-medium text-gray-700">{{ __('Main location') }}</label>
+            <label for="main_location_tag_id" class="block text-sm font-medium text-gray-700">{{ __('Main location') . "*"  }}</label>
             <div class="relative mt-2">
                 <div class="relative">
                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">

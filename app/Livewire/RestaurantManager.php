@@ -9,7 +9,7 @@ use Livewire\Component;
 use Livewire\Attributes\On;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Collection;
-
+use Illuminate\Support\Facades\Log;
 class RestaurantManager extends Component
 {
     public $restaurants;
@@ -31,11 +31,13 @@ class RestaurantManager extends Component
     public $tagSearchFocused = false;
     public $selectedMainTag = null;
     public $selectedLocationTag = null;
+    public $applyingDefaultFilters = false;
 
     public function mount()
     {
         $this->restaurants = collect();
         $this->selectedTags = collect();
+        $this->applyingDefaultFilters = true;
         $this->applyDefaultFilters();
     }
 
@@ -78,11 +80,16 @@ class RestaurantManager extends Component
     public function applyFilters()
     {
         $this->showFilters = false;
+        $this->applyingDefaultFilters = false;
         $this->loadRestaurants();
     }
 
     public function loadRestaurants()
     {
+        if (!Auth::check()) {
+            return redirect()->route('login');
+        }
+
         $query = Restaurant::with(['mainTag', 'mainLocationTag', 'tags'])
             ->where('restaurants.user_id', Auth::id())
             ->orderBy('restaurants.name');
@@ -150,8 +157,9 @@ class RestaurantManager extends Component
             'main_location_tag_id' => null
         ];
         $this->selectedTags = collect();
+        $this->selectedMainTag = null;
+        $this->selectedLocationTag = null;
         $this->dispatch('rating-reset');
-        $this->loadRestaurants();
     }
 
     #[On('rating-changed')]
@@ -162,13 +170,13 @@ class RestaurantManager extends Component
 
     public function hasActiveFilters()
     {
-        if ($this->isUsingDefaultFilters()) {
-            return false;
-        }
+        if ($this->applyingDefaultFilters) return false;
 
         return $this->filters['rating'] > 0
             || !empty($this->filters['price_ranges'])
-            || !empty($this->filters['tag_ids']);
+            || !empty($this->filters['tag_ids'])
+            || $this->filters['main_tag_id']
+            || $this->filters['main_location_tag_id'];
     }
 
     public function isUsingDefaultFilters()
@@ -183,6 +191,8 @@ class RestaurantManager extends Component
         // Sort arrays to ensure consistent comparison
         sort($defaultTags);
         sort($currentTags);
+
+
 
         return $this->filters['rating'] == $defaultFilters->rating
             && $this->filters['price_ranges'] == $defaultFilters->price_ranges
@@ -222,10 +232,13 @@ class RestaurantManager extends Component
 
     public function toggleDefaultFilters()
     {
-        if ($this->isUsingDefaultFilters()) {
-            $this->clearFilters();
-        } else {
+
+        $this->applyingDefaultFilters = !$this->applyingDefaultFilters;
+        $this->clearFilters();
+        if ($this->applyingDefaultFilters) {
             $this->applyDefaultFilters();
+        } else {
+            $this->loadRestaurants();
         }
     }
 

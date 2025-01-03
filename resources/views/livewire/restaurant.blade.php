@@ -1,5 +1,5 @@
 <a href="{{ route('restaurants.edit', $restaurant) }}">
-    <div class="bg-white rounded-lg shadow p-4 mb-3">
+    <div class="bg-white rounded-lg shadow p-4 pb-3 mb-3">
         <div class="flex justify-between items-start">
             <div>
                 <h3 class="text-lg font-semibold text-gray-dark">{{ $restaurant->name }}</h3>
@@ -23,12 +23,8 @@
             </div>
         </div>
 
-        @if($restaurant->description)
-            <p class="mt-2 text-sm text-gray-600">{{ $restaurant->description }}</p>
-        @endif
-
         @if($locationTags->isNotEmpty() || $otherTags->isNotEmpty())
-            <div class="mt-3 flex flex-col gap-2">
+            <div class="mt-2 flex flex-col gap-2">
                 @if($locationTags->isNotEmpty())
                     <div class="flex items-start gap-2">
                         <img src="{{ asset('app-icons/location-outline.svg') }}" alt="Location" class="w-4 h-4 mt-1">
@@ -51,6 +47,10 @@
                     </div>
                 @endif
             </div>
+        @endif
+
+        @if($restaurant->description)
+            <p class="mt-3 text-sm text-gray-600">{{ $restaurant->description }}</p>
         @endif
     </div>
 </a>

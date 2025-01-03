@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 use App\Providers\RouteServiceProvider;
+use Illuminate\Support\Facades\Cookie;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -28,6 +29,7 @@ class AuthenticatedSessionController extends Controller
         $request->authenticate();
 
         $request->session()->regenerate();
+        $request->session()->regenerateToken();
 
         return redirect()->intended(RouteServiceProvider::HOME);
     }
@@ -40,9 +42,9 @@ class AuthenticatedSessionController extends Controller
         Auth::guard('web')->logout();
 
         $request->session()->invalidate();
-
         $request->session()->regenerateToken();
 
-        return redirect(RouteServiceProvider::LOGIN);
+        return redirect(RouteServiceProvider::LOGIN)
+            ->with('status', __('You have been logged out successfully.'));
     }
 }
