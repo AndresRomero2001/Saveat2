@@ -10,7 +10,7 @@
             <img
                 src="{{ asset($showOnlyUserTags ? 'app-icons/user-tag.svg' : 'app-icons/user-tag-outline.svg') }}"
                 alt="{{ $showOnlyUserTags ? __('Show all tags') : __('Show only my tags') }}"
-                class="w-8 h-8"
+                class="w-7 h-7"
             >
         </button>
 
@@ -22,14 +22,14 @@
             <img
                 src="{{ asset($showOnlyLocations ? 'app-icons/location.svg' : 'app-icons/location-outline.svg') }}"
                 alt="{{ $showOnlyLocations ? __('Show all tags') : __('Show only locations') }}"
-                class="w-8 h-8"
+                class="w-7 h-7"
             >
         </button>
     </div>
 
     <div class="flex flex-wrap gap-2">
         @foreach($tags as $tag)
-            <x-tag :tag="$tag" mode="editable" />
+            <x-tags.tag :tag="$tag" mode="editable" />
         @endforeach
     </div>
 
@@ -177,6 +177,11 @@
                                     {{ __('Delete') }}
                                 </x-danger-button>
                             </div>
+                            @error('delete')
+                                <div class="mt-4 text-sm text-red-600">
+                                    {{ $message }}
+                                </div>
+                            @enderror
                         </div>
                     </div>
                 </div>

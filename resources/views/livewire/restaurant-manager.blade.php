@@ -80,17 +80,25 @@
                             </div>
                             @if($selectedMainTag)
                                 <div class="mt-2">
-                                    <div class="inline-flex items-center gap-1 px-2 py-1 rounded-md text-sm bg-gray-100">
-                                        <span>{{ $selectedMainTag->name }}</span>
-                                        <button
-                                            type="button"
-                                            wire:click="removeMainTag"
-                                            class="text-gray-400 hover:text-gray-600"
-                                        >
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                                            </svg>
-                                        </button>
+                                    <div class="inline-flex gap-1 px-2 py-1 rounded-md text-sm bg-white border border-amber-700">
+                                        <div class="flex items-center">
+                                            <img src="{{ asset('app-icons/star-outline.svg') }}" alt="Tag" class="w-4 h-4">
+                                        </div>
+                                        <div class="mt-1.5">
+                                            <span>{{ $selectedMainTag->name }}</span>
+
+                                        </div>
+                                        <div class="mt-2">
+                                            <button
+                                                type="button"
+                                                wire:click="removeMainTag"
+                                                class="text-gray-400 hover:text-gray-600"
+                                            >
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                                </svg>
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             @endif
@@ -134,17 +142,24 @@
                             </div>
                             @if($selectedLocationTag)
                                 <div class="mt-2">
-                                    <div class="inline-flex items-center gap-1 px-2 py-1 rounded-md text-sm bg-gray-100">
-                                        <span>{{ $selectedLocationTag->name }}</span>
-                                        <button
-                                            type="button"
-                                            wire:click="removeLocationTag"
-                                            class="text-gray-400 hover:text-gray-600"
-                                        >
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                                            </svg>
-                                        </button>
+                                    <div class="inline-flex gap-1 px-2 py-1 rounded-md text-sm bg-white border border-primary-blue">
+                                        <div class="flex items-center">
+                                            <img src="{{ asset('app-icons/star-outline.svg') }}" alt="Location" class="w-4 h-4">
+                                        </div>
+                                        <div class="mt-1.5">
+                                            <span>{{ $selectedLocationTag->name }}</span>
+                                        </div>
+                                        <div class="mt-2">
+                                            <button
+                                                type="button"
+                                                wire:click="removeLocationTag"
+                                                class="text-gray-400 hover:text-gray-600"
+                                            >
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                                </svg>
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             @endif
@@ -190,7 +205,7 @@
                             @if($selectedTags->isNotEmpty())
                                 <div class="mt-2 flex flex-wrap gap-1">
                                     @foreach($selectedTags as $tag)
-                                        <div class="inline-flex items-center gap-1 px-2 py-1 rounded-md text-sm bg-gray-100">
+                                        <div class="inline-flex items-center gap-1 px-2 py-1 rounded-md text-sm bg-white border {{ $tag->is_location ? 'border-primary-blue' : 'border-amber-700' }}">
                                             <span>{{ $tag->name }}</span>
                                             <button
                                                 type="button"
@@ -256,7 +271,7 @@
             <p class="text-gray-500">{{ __('No restaurants found') }}</p>
         </div>
     @else
-        <div class="space-y-4">
+        <div class="">
             @foreach($restaurants as $restaurant)
                 <livewire:restaurant :restaurant="$restaurant" :key="$restaurant->id" />
             @endforeach

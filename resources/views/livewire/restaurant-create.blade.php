@@ -55,18 +55,7 @@
 
             @if($selectedMainTag)
                 <div class="mt-2">
-                    <div class="inline-flex items-center gap-1 px-2 py-1 rounded-md text-sm bg-gray-100">
-                        <span>{{ $selectedMainTag->name }}</span>
-                        <button
-                            type="button"
-                            wire:click="removeMainTag"
-                            class="text-gray-400 hover:text-gray-600"
-                        >
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                            </svg>
-                        </button>
-                    </div>
+                    <x-tags.main-removable-tag :tag="$selectedMainTag" />
                 </div>
             @endif
             @error('main_tag_id') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
@@ -119,40 +108,10 @@
 
             @if($selectedLocationTag)
                 <div class="mt-2">
-                    <div class="inline-flex items-center gap-1 px-2 py-1 rounded-md text-sm bg-gray-100">
-                        <span>{{ $selectedLocationTag->name }}</span>
-                        <button
-                            type="button"
-                            wire:click="removeLocationTag"
-                            class="text-gray-400 hover:text-gray-600"
-                        >
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                            </svg>
-                        </button>
-                    </div>
+                    <x-tags.main-removable-tag :tag="$selectedLocationTag" />
                 </div>
             @endif
             @error('main_location_tag_id') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
-        </div>
-
-        <div>
-            <label for="price_range" class="block text-sm font-medium text-gray-700">{{ __('Price range') }}</label>
-            <select wire:model="price_range" id="price_range" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-blue focus:ring-primary-blue">
-                <option value="{{ null }}">{{ __('Select') }}</option>
-                @foreach(App\Enums\PriceRange::cases() as $range)
-                    <option value="{{ $range->value }}">{{ $range->label() }}</option>
-                @endforeach
-            </select>
-            @error('price_range') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
-        </div>
-
-        <div>
-            <label for="rating" class="block text-sm font-medium text-gray-700">{{ __('Rating') }}</label>
-            <div class="mt-2">
-                <livewire:star-rating-input wire:model="rating" :value="$rating ?? 0" />
-            </div>
-            @error('rating') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
         </div>
 
         <div>
@@ -202,21 +161,29 @@
             @if($selectedTagsData->isNotEmpty())
                 <div class="mt-2 flex flex-wrap gap-1">
                     @foreach($selectedTagsData as $tag)
-                        <div class="inline-flex items-center gap-1 px-2 py-1 rounded-md text-sm bg-gray-100">
-                            <span>{{ $tag->name }}</span>
-                            <button
-                                type="button"
-                                wire:click="removeTag({{ $tag->id }})"
-                                class="text-gray-400 hover:text-gray-600"
-                            >
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                                </svg>
-                            </button>
-                        </div>
+                        <x-tags.removable-tag :tag="$tag" />
                     @endforeach
                 </div>
             @endif
+        </div>
+
+        <div>
+            <label for="price_range" class="block text-sm font-medium text-gray-700">{{ __('Price range') }}</label>
+            <select wire:model="price_range" id="price_range" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-blue focus:ring-primary-blue">
+                <option value="{{ null }}">{{ __('Select') }}</option>
+                @foreach(App\Enums\PriceRange::cases() as $range)
+                    <option value="{{ $range->value }}">{{ $range->label() }}</option>
+                @endforeach
+            </select>
+            @error('price_range') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
+        </div>
+
+        <div>
+            <label for="rating" class="block text-sm font-medium text-gray-700">{{ __('Rating') }}</label>
+            <div class="mt-2">
+                <livewire:star-rating-input wire:model="rating" :value="$rating ?? 0" />
+            </div>
+            @error('rating') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
         </div>
 
         <div>

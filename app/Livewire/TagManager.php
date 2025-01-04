@@ -3,9 +3,12 @@
 namespace App\Livewire;
 
 use App\Models\Tag;
+use App\Models\Restaurant;
 use Livewire\Component;
 use Livewire\Attributes\On;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+
 class TagManager extends Component
 {
     public $tags;
@@ -108,7 +111,20 @@ class TagManager extends Component
 
     public function deleteTag()
     {
-        Tag::find($this->deletingTagId)->delete();
+        $tag = Tag::find($this->deletingTagId);
+
+        // Check if used as main tag
+        $usedAsMainTag = Restaurant::where('main_tag_id', $tag->id)
+            ->orWhere('main_location_tag_id', $tag->id)
+            ->exists();
+
+        if ($usedAsMainTag) {
+            $this->addError('delete', __('Cannot delete this tag as it is being used as a main tag in one or more restaurants'));
+            return;
+        }
+
+        $tag->delete();
+
         $this->showDeleteModal = false;
         $this->deletingTagId = null;
         $this->loadTags();

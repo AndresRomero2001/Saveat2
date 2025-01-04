@@ -309,5 +309,6 @@
     "Other tags": "Otras etiquetas",
     "Default filters saved successfully": "Filtros por defecto guardados correctamente",
     "Filters saved successfully": "Filtros guardados correctamente",
-    "Default filters updated": "Filtros por defecto actualizados"
+    "Default filters updated": "Filtros por defecto actualizados",
+    "Cannot delete this tag as it is being used as a main tag in one or more restaurants": "No se puede eliminar esta etiqueta porque se está utilizando como etiqueta principal en uno o más restaurantes"
 }

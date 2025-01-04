@@ -7,7 +7,7 @@
 
     <div class="py-6">
         <div class="max-w-7xl mx-auto space-y-6">
-            <div class="p-4 bg-white shadow rounded-lg">
+            <div class="p-4 bg-white shadow rounded-lg" x-show="!document.body.getAttribute('data-app-installed')">
                 <div class="max-w-xl">
                     <h3 class="text-lg font-medium text-gray-900">
                         {{ __('Install App') }}
@@ -154,6 +154,12 @@
             installText.style.display = 'block';
             notAvailableText.style.display = 'none';
         });
+
+        // Check if app is already installed
+        const isAppInstalled = window.matchMedia('(display-mode: standalone)').matches;
+
+        // Set a data attribute on body to control visibility
+        document.body.setAttribute('data-app-installed', isAppInstalled);
     </script>
     @endpush
 </x-app-layout>
