@@ -7,7 +7,12 @@ use Livewire\Attributes\On;
 
 class TagHeader extends Component
 {
-    public $title = 'Tags';
+    public $title;
+
+    public function mount()
+    {
+        $this->title = __('Tags');
+    }
 
     #[On('filters-changed')]
     public function updateTitle($showOnlyUserTags, $showOnlyLocations)

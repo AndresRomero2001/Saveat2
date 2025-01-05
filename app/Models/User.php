@@ -47,4 +47,18 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    protected static function booted()
+    {
+        static::created(function ($user) {
+            UserDefaultFilter::create([
+                'user_id' => $user->id,
+                'rating' => 0,
+                'price_ranges' => [],
+                'tag_ids' => [],
+                'main_tag_id' => null,
+                'main_location_tag_id' => null
+            ]);
+        });
+    }
 }
