@@ -17,16 +17,19 @@
     <body class="font-sans text-gray-900 antialiased">
 
         <!-- Mobile Content -->
-        <div class="min-h-screen bg-gray-100 sm:hidden pb-16">
-            <div class="min-h-screen flex flex-col justify-center items-center sm:pt-0 bg-gray-100 ">
-                <div class="mb-4">
-                    <x-application-logo class="w-16 h-16 fill-current text-gray-500" />
+        <div class="min-h-screen bg-gray-primary-dark sm:hidden pb-16">
+
+            <div class="min-h-screen flex flex-col justify-center items-center mx-4">
+                <div class="mb-2">
+                    <img src="{{ asset('app-icons/logo-sin-fondo.png') }}" alt="Saveat" class="w-24 h-24">
                 </div>
 
-                <!-- bienvenido a SavEat -->
-                {{-- <h1 class="text-2xl font-bold mb-4">SavEat</h1> --}}
+                <div class="flex flex-col items-center mb-10">
+                    <h1 class="text-4xl font-bold  text-white">Saveat</h1>
+                    <p class="text-md text-white">Guarda, clasifica y busca tus restaurantes</p>
+                </div>
 
-                <div class="w-full sm:max-w-md px-6 py-8 bg-white shadow-md overflow-hidden sm:rounded-lg">
+                <div class="w-full px-8 py-12 bg-white shadow-md overflow-hidden rounded-lg">
                     {{ $slot }}
                 </div>
             </div>
