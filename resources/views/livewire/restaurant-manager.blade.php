@@ -276,10 +276,6 @@
                 <livewire:restaurant :restaurant="$restaurant" :key="$restaurant->id" />
             @endforeach
         </div>
-
-        <div class="mt-4 text-sm text-gray-400">
-            {{ $restaurants->count() }} {{ __('restaurants') }}
-        </div>
     @endif
 
     <a

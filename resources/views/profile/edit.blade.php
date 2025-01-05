@@ -7,7 +7,7 @@
 
     <div class="py-6">
         <div class="max-w-7xl mx-auto space-y-6">
-            <div class="p-4 bg-white shadow rounded-lg" id="install-app-container" style="display: none;">
+            <div class="p-4 bg-white shadow rounded-lg" x-show="!document.body.getAttribute('data-app-installed')">
                 <div class="max-w-xl">
                     <h3 class="text-lg font-medium text-gray-900">
                         {{ __('Install App') }}
@@ -23,7 +23,7 @@
                         <p id="installText" class="text-sm text-gray-600" style="display: none;">
                             {{ __('App already installed') }}
                         </p>
-                        <p id="notAvailableText" class="text-sm text-gray-600" style="display: none;">
+                        <p id="notAvailableText" class="text-sm text-gray-600">
                             {{ __('Installation will be available when conditions are met') }}
                         </p>
                     </div>
@@ -65,41 +65,101 @@
     @push('scripts')
     <script>
         let deferredPrompt;
-        const installAppContainer = document.getElementById('install-app-container');
         const installButton = document.getElementById('installButton');
         const installText = document.getElementById('installText');
         const notAvailableText = document.getElementById('notAvailableText');
 
-        // If already in standalone mode, don't do anything
-        if (window.matchMedia('(display-mode: standalone)').matches) {
-            return;
+        // Debug function to check PWA requirements
+        async function checkPWARequirements() {
+            const requirements = {
+                isHttps: window.location.protocol === 'https:',
+                hasServiceWorker: 'serviceWorker' in navigator,
+                hasManifest: false,
+                hasRequiredIcons: false,
+                isStandalone: window.matchMedia('(display-mode: standalone)').matches,
+                isInSupportedBrowser: /chrome|edge|samsung/i.test(navigator.userAgent)
+            };
+
+            // Check manifest
+            try {
+                const manifestResponse = await fetch('/manifest.json');
+                if (manifestResponse.ok) {
+                    requirements.hasManifest = true;
+                    const manifest = await manifestResponse.json();
+                    // Check for required icons (at least 192x192 and 512x512)
+                    requirements.hasRequiredIcons = manifest.icons &&
+                        manifest.icons.some(icon => icon.sizes === '192x192') &&
+                        manifest.icons.some(icon => icon.sizes === '512x512');
+                }
+            } catch (e) {
+                console.error('Error checking manifest:', e);
+            }
+
+            // Log results
+            console.table(requirements);
+
+            // Update UI with specific missing requirements
+            let missingReqs = [];
+            if (!requirements.isHttps) missingReqs.push('HTTPS connection');
+            if (!requirements.hasServiceWorker) missingReqs.push('Service Worker support');
+            if (!requirements.hasManifest) missingReqs.push('Web Manifest');
+            if (!requirements.hasRequiredIcons) missingReqs.push('Required icons');
+            if (!requirements.isInSupportedBrowser) missingReqs.push('Supported browser');
+
+            if (missingReqs.length > 0) {
+                notAvailableText.textContent = `Missing requirements: ${missingReqs.join(', ')}`;
+            }
+
+            return requirements;
         }
 
-        // Only show install UI when beforeinstallprompt fires
+        // Run checks when page loads
+        checkPWARequirements();
+
+        // Rest of your existing code...
+        if (window.matchMedia('(display-mode: standalone)').matches) {
+            installButton.style.display = 'none';
+            installText.style.display = 'block';
+            notAvailableText.style.display = 'none';
+        }
+
         window.addEventListener('beforeinstallprompt', (e) => {
+            console.log('Install prompt triggered!'); // Debug log
             e.preventDefault();
             deferredPrompt = e;
-
-            // Show install UI
-            installAppContainer.style.display = 'block';
+            notAvailableText.style.display = 'none';
             installButton.style.display = 'inline-flex';
         });
 
         installButton.addEventListener('click', async () => {
-            if (!deferredPrompt) return;
-
+            if (!deferredPrompt) {
+                console.log('No deferred prompt available'); // Debug log
+                return;
+            }
             deferredPrompt.prompt();
             const { outcome } = await deferredPrompt.userChoice;
+            console.log('Install prompt outcome:', outcome); // Debug log
             deferredPrompt = null;
-
-            // Hide container after user makes a choice
-            installAppContainer.style.display = 'none';
+            installButton.style.display = 'none';
+            if (outcome === 'accepted') {
+                installText.style.display = 'block';
+            } else {
+                notAvailableText.style.display = 'block';
+            }
         });
 
-        // Hide install UI if app gets installed
-        window.addEventListener('appinstalled', () => {
-            installAppContainer.style.display = 'none';
+        window.addEventListener('appinstalled', (evt) => {
+            console.log('App installed!'); // Debug log
+            installButton.style.display = 'none';
+            installText.style.display = 'block';
+            notAvailableText.style.display = 'none';
         });
+
+        // Check if app is already installed
+        const isAppInstalled = window.matchMedia('(display-mode: standalone)').matches;
+
+        // Set a data attribute on body to control visibility
+        document.body.setAttribute('data-app-installed', isAppInstalled);
     </script>
     @endpush
 </x-app-layout>
