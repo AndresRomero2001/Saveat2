@@ -13,6 +13,17 @@
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+        <!-- PWA  -->
+        <link rel="manifest" href="{{ asset('manifest.json') }}">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <meta name="apple-mobile-web-app-title" content="Saveat">
+        <link rel="apple-touch-icon" href="{{ asset('app-icons/icon-152x152.png') }}">
+
+        <!-- Favicon -->
+        <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('app-icons/favicon-32x32.png') }}">
+        <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('app-icons/favicon-16x16.png') }}">
     </head>
     <body class="font-sans text-gray-900 antialiased">
 
