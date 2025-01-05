@@ -2,28 +2,23 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Tag extends Model
 {
-    use HasFactory;
+    protected $fillable = ['name', 'is_location', 'user_id'];
 
-    protected $fillable = [
-        'name',
-        'is_location',
-        'is_default',
-        'user_id'
-    ];
-
-    protected $casts = [
-        'is_location' => 'boolean',
-        'is_default' => 'boolean'
-    ];
-
-    public function restaurants(): BelongsToMany
+    public function user(): BelongsTo
     {
-        return $this->belongsToMany(Restaurant::class);
+        return $this->belongsTo(User::class);
+    }
+
+    public function scopeVisibleToUser($query, $userId)
+    {
+        return $query->where(function ($query) use ($userId) {
+            $query->where('user_id', $userId)
+                  ->orWhere('is_default', true);
+        });
     }
 }

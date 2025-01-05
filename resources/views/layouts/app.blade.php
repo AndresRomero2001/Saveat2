@@ -25,6 +25,10 @@
         @stack('styles')
 
         @livewireStyles
+
+        <!-- Favicon -->
+        <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('app-icons/favicon-32x32.png') }}">
+        <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('app-icons/favicon-16x16.png') }}">
     </head>
     <body class="font-sans antialiased">
         <!-- Mobile Content -->

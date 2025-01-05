@@ -34,7 +34,9 @@ const assets = [
     '/app-icons/user-outline.svg',
     '/app-icons/user-tag-outline.svg',
     '/app-icons/user-tag.svg',
-    '/app-icons/user.svg'
+    '/app-icons/user.svg',
+    '/app-icons/favicon-16x16.png',
+    '/app-icons/favicon-32x32.png'
 ];
 
 // Install Service Worker

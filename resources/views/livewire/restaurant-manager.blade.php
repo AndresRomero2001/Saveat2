@@ -277,9 +277,15 @@
             @endforeach
         </div>
 
-        <div class="mt-4 text-sm text-gray-400">
-            {{ $restaurants->count() }} {{ __('restaurants') }}
-        </div>
+        @if($restaurants->count() == 1)
+            <div class="mt-4 text-sm text-gray-400">
+                {{ $restaurants->count() }} {{ __('restaurant') }}
+            </div>
+        @else
+            <div class="mt-4 text-sm text-gray-400">
+                {{ $restaurants->count() }} {{ __('restaurants') }}
+            </div>
+        @endif
     @endif
 
     <a

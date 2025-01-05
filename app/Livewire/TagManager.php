@@ -39,7 +39,7 @@ class TagManager extends Component
 
     public function loadTags()
     {
-        $query = Tag::orderBy('name');
+        $query = Tag::visibleToUser(Auth::id())->orderBy('name');
 
         if ($this->search) {
             $query->where('name', 'like', '%' . $this->search . '%');
@@ -73,6 +73,9 @@ class TagManager extends Component
     public function editTag($tagId)
     {
         $tag = Tag::find($tagId);
+
+        $this->authorize('update', $tag);
+
         $this->editingTagId = $tag->id;
         $this->editingTagName = $tag->name;
         $this->editingTagIsLocation = $tag->is_location;
@@ -112,6 +115,8 @@ class TagManager extends Component
     public function deleteTag()
     {
         $tag = Tag::find($this->deletingTagId);
+
+        $this->authorize('delete', $tag);
 
         // Check if used as main tag
         $usedAsMainTag = Restaurant::where('main_tag_id', $tag->id)

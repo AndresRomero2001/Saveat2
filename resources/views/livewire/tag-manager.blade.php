@@ -33,9 +33,15 @@
         @endforeach
     </div>
 
-    <div class="mt-4 text-sm text-gray-400">
-        {{ $tags->count() }} {{ __('tags') }}
-    </div>
+    @if($tags->count() == 1)
+        <div class="mt-4 text-sm text-gray-400">
+            {{ $tags->count() }} {{ __('tag') }}
+        </div>
+    @else
+        <div class="mt-4 text-sm text-gray-400">
+            {{ $tags->count() }} {{ __('tags') }}
+        </div>
+    @endif
 
     @if($showCreateModal)
         <div

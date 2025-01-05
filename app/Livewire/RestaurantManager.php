@@ -129,21 +129,9 @@ class RestaurantManager extends Component
     public function render()
     {
         return view('livewire.restaurant-manager', [
-            'searchedMainTags' => Tag::where('name', 'like', '%' . $this->mainTagSearch . '%')
-                ->where('is_location', false)
-                ->orderBy('name')
-                ->limit(5)
-                ->get(),
-            'searchedLocationTags' => Tag::where('name', 'like', '%' . $this->locationTagSearch . '%')
-                ->where('is_location', true)
-                ->orderBy('name')
-                ->limit(5)
-                ->get(),
-            'searchedTags' => Tag::where('name', 'like', '%' . $this->tagSearch . '%')
-                ->whereNotIn('id', $this->selectedTags->pluck('id'))
-                ->orderBy('name')
-                ->limit(5)
-                ->get()
+            'searchedMainTags' => $this->getSearchedMainTag(),
+            'searchedLocationTags' => $this->getSearchedMainLocationTag(),
+            'searchedTags' => $this->getSearchedTags()
         ]);
     }
 
@@ -270,4 +258,29 @@ class RestaurantManager extends Component
         $this->selectedLocationTag = null;
     }
 
+    protected function getSearchedTags()
+    {
+        return Tag::visibleToUser(Auth::id())
+            ->where('name', 'like', "%{$this->tagSearch}%")
+            ->limit(5)
+            ->get();
+    }
+
+    protected function getSearchedMainTag()
+    {
+        return Tag::visibleToUser(Auth::id())
+            ->where('name', 'like', "%{$this->mainTagSearch}%")
+            ->where('is_location', false)
+            ->limit(5)
+            ->get();
+    }
+
+    protected function getSearchedMainLocationTag()
+    {
+        return Tag::visibleToUser(Auth::id())
+            ->where('name', 'like', "%{$this->locationTagSearch}%")
+            ->where('is_location', true)
+            ->limit(5)
+            ->get();
+    }
 }
