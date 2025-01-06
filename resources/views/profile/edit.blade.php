@@ -78,7 +78,8 @@
                 hasManifest: false,
                 hasRequiredIcons: false,
                 isStandalone: window.matchMedia('(display-mode: standalone)').matches,
-                isInSupportedBrowser: /chrome|edge|samsung/i.test(navigator.userAgent)
+                isInSupportedBrowser: /chrome|edge|samsung|safari|webkit/i.test(navigator.userAgent) ||
+                     /iphone|ipad|ipod|android/i.test(navigator.userAgent)
             };
 
             // Check manifest
