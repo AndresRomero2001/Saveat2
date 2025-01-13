@@ -1,15 +1,17 @@
-<div class="p-4 pt-0">
-    <form wire:submit="updateRestaurant" class="space-y-4">
+<div class="p-4 space-y-6">
+    <form wire:submit="updateFilter" class="space-y-4">
         @csrf
 
+        <!-- Name field -->
         <div>
             <label for="name" class="block text-sm font-medium text-gray-700">{{ __('Name') . "*"  }}</label>
             <input type="text" wire:model="name" id="name" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-blue focus:ring-primary-blue">
             @error('name') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
         </div>
 
+        <!-- Main tag field -->
         <div>
-            <label for="main_tag_id" class="block text-sm font-medium text-gray-700">{{ __('Main tag') . "*"  }}</label>
+            <label for="main_tag_id" class="block text-sm font-medium text-gray-700">{{ __('Main tag') . "*" }}</label>
             <div class="relative mt-2">
                 <div class="relative">
                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -61,6 +63,7 @@
             @error('main_tag_id') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
         </div>
 
+        <!-- Main location field -->
         <div>
             <label for="main_location_tag_id" class="block text-sm font-medium text-gray-700">{{ __('Main location') . "*"  }}</label>
             <div class="relative mt-2">
@@ -75,7 +78,7 @@
                         wire:model.live="locationTagSearch"
                         wire:focus="$set('locationTagSearchFocused', true)"
                         wire:blur="$set('locationTagSearchFocused', false)"
-                        class="block w-full pl-9 rounded-md border-gray-300 shadow-sm focus:border-primary-blue focus:ring-primary-blue"
+                        class="block w-full pl-10 rounded-md border-gray-300 shadow-sm focus:border-primary-blue focus:ring-primary-blue"
                         placeholder="{{ __('Search...') }}"
                     >
                 </div>
@@ -114,9 +117,9 @@
             @error('main_location_tag_id') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
         </div>
 
+        <!-- Tags field -->
         <div>
             <label for="tags" class="block text-sm font-medium text-gray-700">{{ __('Tags') }}</label>
-
             <div class="relative mt-2">
                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                     <svg class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
@@ -158,42 +161,43 @@
                 @endif
             </div>
 
-            @if($selectedTagsData->isNotEmpty())
+            @if($selectedTags->isNotEmpty())
                 <div class="mt-2 flex flex-wrap gap-1">
-                    @foreach($selectedTagsData as $tag)
+                    @foreach($selectedTags as $tag)
                         <x-tags.removable-tag :tag="$tag" />
                     @endforeach
                 </div>
             @endif
         </div>
 
+        <!-- Price Range -->
         <div>
-            <label for="price_range" class="block text-sm font-medium text-gray-700">{{ __('Price range') }}</label>
-            <select wire:model="price_range" id="price_range" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-blue focus:ring-primary-blue">
-                <option value="">{{ __('Select') }}</option>
-                @foreach(App\Enums\PriceRange::cases() as $range)
-                    <option value="{{ $range->value }}">{{ $range->label() }}</option>
+            <label class="block text-sm font-medium text-gray-700">{{ __('Price Range') }}</label>
+            <div class="grid grid-cols-2 gap-2 mt-2">
+                @foreach(\App\Enums\PriceRange::cases() as $priceRange)
+                    <button
+                        type="button"
+                        wire:click="togglePriceRange('{{ $priceRange->value }}')"
+                        class="py-2 px-3 rounded-lg border {{ in_array($priceRange->value, $priceRanges) ? 'bg-primary-blue text-white border-primary-blue' : 'border-gray-300' }}"
+                    >
+                        {{ $priceRange->label() }}
+                    </button>
                 @endforeach
-            </select>
-            @error('price_range') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
+            </div>
+            @error('priceRanges') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
         </div>
 
+        <!-- Rating -->
         <div>
-            <label for="rating" class="block text-sm font-medium text-gray-700">{{ __('Rating') }}</label>
+            <label class="block text-sm font-medium text-gray-700">{{ __('Rating') }}</label>
             <div class="mt-2">
-                <livewire:star-rating-input wire:model="rating" :value="$rating ?? 0" />
+                <livewire:star-rating-input :value="$rating ?? 0" />
             </div>
             @error('rating') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
         </div>
 
-        <div>
-            <label for="description" class="block text-sm font-medium text-gray-700">{{ __('Description') }}</label>
-            <textarea wire:model="description" id="description" rows="3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-blue focus:ring-primary-blue"></textarea>
-            @error('description') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
-        </div>
-
-        <!-- Only change the buttons at the bottom -->
-        <div class="pt-6 flex justify-between">
+        <!-- Action Buttons -->
+        <div class="flex justify-between gap-2">
             <button
                 type="button"
                 wire:click="$set('showDeleteModal', true)"
@@ -201,10 +205,9 @@
             >
                 {{ __('Delete') }}
             </button>
-
-            <div class="flex gap-3">
+            <div class="flex gap-2">
                 <a
-                    href="{{ route('restaurants.index') }}"
+                    href="{{ route('filters.index') }}"
                     class="inline-flex justify-center py-2 px-4 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-blue"
                 >
                     {{ __('Cancel') }}
@@ -219,35 +222,37 @@
         </div>
     </form>
 
+
+    <!-- Delete Modal -->
     @if($showDeleteModal)
         <div
-            class="fixed inset-0 bg-gray-500 bg-opacity-75 z-50 transition-opacity duration-300"
+            class="fixed inset-0 bg-gray-500 bg-opacity-75 z-50"
             wire:click="$set('showDeleteModal', false)"
         >
             <div class="flex min-h-full items-center justify-center p-4">
                 <div
-                    class="bg-white rounded-lg overflow-hidden shadow-xl transform w-full max-w-lg transition-all duration-300 ease-out"
+                    class="bg-white rounded-lg overflow-hidden shadow-xl transform w-full max-w-lg"
                     wire:click.stop="$refresh"
                 >
                     <div class="p-6">
                         <h2 class="text-lg font-medium text-gray-900">
-                            {{ __('Delete Restaurant') }}
+                            {{ __('Delete Filter') }}
                         </h2>
                         <p class="mt-3 text-sm text-gray-600">
-                            {{ __('Are you sure you want to delete this restaurant? This action cannot be undone.') }}
+                            {{ __('Are you sure you want to delete this filter? This action cannot be undone.') }}
                         </p>
                         <div class="mt-6 flex justify-end gap-3">
                             <button
                                 type="button"
                                 wire:click="$set('showDeleteModal', false)"
-                                class="inline-flex justify-center py-2 px-4 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-blue"
+                                class="px-4 py-2 text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200"
                             >
                                 {{ __('Cancel') }}
                             </button>
                             <button
                                 type="button"
-                                wire:click="deleteRestaurant"
-                                class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+                                wire:click="deleteFilter"
+                                class="px-4 py-2 text-white bg-red-600 rounded-lg hover:bg-red-700"
                             >
                                 {{ __('Delete') }}
                             </button>
@@ -258,8 +263,8 @@
         </div>
     @endif
 
-        <!-- Create Tag Modal -->
-        @if($showCreateTagModal)
+    <!-- Create Tag Modal -->
+    @if($showCreateTagModal)
         <div
             class="fixed inset-0 bg-gray-500 bg-opacity-75 z-50"
             wire:click="$set('showCreateTagModal', false)"
@@ -321,5 +326,4 @@
         </div>
     @endif
 </div>
-
 

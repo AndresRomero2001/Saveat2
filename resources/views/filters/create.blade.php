@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Create Restaurant') }}
+            {{ __('Create Filter') }}
         </h2>
     </x-slot>
 
@@ -9,7 +9,7 @@
         <div class="max-w-7xl mx-auto">
             <div class="bg-white overflow-hidden shadow-sm">
                 <div class="p-6 pt-0 text-gray-900">
-                    <livewire:restaurant-create />
+                    <livewire:filter-create />
                 </div>
             </div>
         </div>

@@ -61,4 +61,9 @@ class User extends Authenticatable
             ]);
         });
     }
+
+    public function filters()
+    {
+        return $this->hasMany(Filter::class);
+    }
 }

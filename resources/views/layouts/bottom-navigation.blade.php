@@ -6,6 +6,13 @@
                  class="w-6 h-6">
         </a>
 
+        <a href="{{ route('filters.index') }}" class="text-zinc-700">
+            <img src="{{ asset(request()->routeIs('filters.*') ? 'app-icons/search-fav.svg' : 'app-icons/search-fav-outline.svg') }}"
+                alt="{{ __('Filters') }}"
+                class="w-6 h-6"
+            >
+        </a>
+
         <a href="{{ route('tags.index') }}" class="text-zinc-700">
             <img src="{{ asset(request()->routeIs('tags.*') ? 'app-icons/tag.svg' : 'app-icons/tag-outline.svg') }}"
                  alt="Tags"
@@ -17,5 +24,6 @@
                  alt="Profile"
                  class="w-6 h-6">
         </a>
+
     </div>
 </nav>

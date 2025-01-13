@@ -5,6 +5,7 @@ namespace App\Livewire;
 use App\Models\Restaurant;
 use App\Models\Tag;
 use App\Models\UserDefaultFilter;
+use App\Models\Filter;
 use Livewire\Component;
 use Livewire\Attributes\On;
 use Illuminate\Support\Facades\Auth;
@@ -282,5 +283,26 @@ class RestaurantManager extends Component
             ->where('is_location', true)
             ->limit(5)
             ->get();
+    }
+
+    public function applySavedFilter($filterId)
+    {
+        $filter = Filter::findOrFail($filterId);
+
+        $this->filters = [
+            'rating' => $filter->rating,
+            'price_ranges' => $filter->price_ranges ?? [],
+            'tag_ids' => $filter->tag_ids ?? [],
+            'main_tag_id' => $filter->main_tag_id,
+            'main_location_tag_id' => $filter->main_location_tag_id,
+        ];
+
+        // Update selected tags
+        $this->selectedTags = Tag::whereIn('id', $this->filters['tag_ids'])->get();
+        $this->selectedMainTag = $filter->mainTag;
+        $this->selectedLocationTag = $filter->mainLocationTag;
+
+        $this->applyingDefaultFilters = false;
+        $this->loadRestaurants();
     }
 }
