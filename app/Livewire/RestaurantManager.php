@@ -4,13 +4,11 @@ namespace App\Livewire;
 
 use App\Models\Restaurant;
 use App\Models\Tag;
-use App\Models\UserDefaultFilter;
 use App\Models\Filter;
 use Livewire\Component;
 use Livewire\Attributes\On;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Log;
 class RestaurantManager extends Component
 {
     public $restaurants;
@@ -32,14 +30,27 @@ class RestaurantManager extends Component
     public $tagSearchFocused = false;
     public $selectedMainTag = null;
     public $selectedLocationTag = null;
-    public $applyingDefaultFilters = false;
+    public $activeFilters = [
+        'rating' => 0,
+        'price_ranges' => [],
+        'tag_ids' => [],
+        'main_tag_id' => null,
+        'main_location_tag_id' => null
+    ];
 
     public function mount()
     {
         $this->restaurants = collect();
         $this->selectedTags = collect();
-        $this->applyingDefaultFilters = true;
-        $this->applyDefaultFilters();
+
+        $filter_id = session('apply_filter_id');
+
+        if ($filter_id) {
+            $this->setSavedFilters($filter_id);
+            $this->activeFilters = $this->filters;
+        }
+
+        $this->loadRestaurants();
     }
 
     #[On('search-updated')]
@@ -80,8 +91,8 @@ class RestaurantManager extends Component
 
     public function applyFilters()
     {
+        $this->activeFilters = $this->filters;
         $this->showFilters = false;
-        $this->applyingDefaultFilters = false;
         $this->loadRestaurants();
     }
 
@@ -159,76 +170,11 @@ class RestaurantManager extends Component
 
     public function hasActiveFilters()
     {
-        if ($this->applyingDefaultFilters) return false;
-
-        return $this->filters['rating'] > 0
-            || !empty($this->filters['price_ranges'])
-            || !empty($this->filters['tag_ids'])
-            || $this->filters['main_tag_id']
-            || $this->filters['main_location_tag_id'];
-    }
-
-    public function isUsingDefaultFilters()
-    {
-        $defaultFilters = UserDefaultFilter::where('user_id', Auth::id())->first();
-        if (!$defaultFilters) return false;
-
-        // Create arrays for comparison
-        $defaultTags = $defaultFilters->tag_ids ?? [];
-        $currentTags = $this->filters['tag_ids'];
-
-        // Sort arrays to ensure consistent comparison
-        sort($defaultTags);
-        sort($currentTags);
-
-
-
-        return $this->filters['rating'] == $defaultFilters->rating
-            && $this->filters['price_ranges'] == $defaultFilters->price_ranges
-            && $currentTags == $defaultTags
-            && $this->filters['main_tag_id'] == $defaultFilters->main_tag_id
-            && $this->filters['main_location_tag_id'] == $defaultFilters->main_location_tag_id;
-    }
-
-    public function applyDefaultFilters()
-    {
-        $defaultFilters = UserDefaultFilter::where('user_id', Auth::id())->first();
-
-        if ($defaultFilters) {
-            $this->filters['rating'] = $defaultFilters->rating ?? 0;
-            $this->filters['price_ranges'] = $defaultFilters->price_ranges ?? [];
-
-            // Set main tags first
-            $this->filters['main_tag_id'] = $defaultFilters->main_tag_id;
-            $this->filters['main_location_tag_id'] = $defaultFilters->main_location_tag_id;
-
-            // Set selected main tags for the UI
-            if ($defaultFilters->main_tag_id) {
-                $this->selectedMainTag = Tag::find($defaultFilters->main_tag_id);
-            }
-            if ($defaultFilters->main_location_tag_id) {
-                $this->selectedLocationTag = Tag::find($defaultFilters->main_location_tag_id);
-            }
-
-            // Set other tags (excluding main tags)
-            $this->filters['tag_ids'] = $defaultFilters->tag_ids ?? [];
-            $this->selectedTags = Tag::whereIn('id', $this->filters['tag_ids'])->get();
-
-            $this->dispatch('rating-reset');
-            $this->loadRestaurants();
-        }
-    }
-
-    public function toggleDefaultFilters()
-    {
-
-        $this->applyingDefaultFilters = !$this->applyingDefaultFilters;
-        $this->clearFilters();
-        if ($this->applyingDefaultFilters) {
-            $this->applyDefaultFilters();
-        } else {
-            $this->loadRestaurants();
-        }
+        return $this->activeFilters['rating'] > 0
+            || !empty($this->activeFilters['price_ranges'])
+            || !empty($this->activeFilters['tag_ids'])
+            || $this->activeFilters['main_tag_id']
+            || $this->activeFilters['main_location_tag_id'];
     }
 
     public function setMainTag($tagId)
@@ -285,7 +231,7 @@ class RestaurantManager extends Component
             ->get();
     }
 
-    public function applySavedFilter($filterId)
+    public function setSavedFilters($filterId)
     {
         $filter = Filter::findOrFail($filterId);
 
@@ -301,8 +247,17 @@ class RestaurantManager extends Component
         $this->selectedTags = Tag::whereIn('id', $this->filters['tag_ids'])->get();
         $this->selectedMainTag = $filter->mainTag;
         $this->selectedLocationTag = $filter->mainLocationTag;
+    }
 
-        $this->applyingDefaultFilters = false;
-        $this->loadRestaurants();
+    public function openFiltersModal()
+    {
+        // Restore active filters when opening modal
+        if ($this->hasActiveFilters()) {
+            $this->filters = $this->activeFilters;
+            $this->selectedTags = Tag::whereIn('id', $this->activeFilters['tag_ids'])->get();
+            $this->selectedMainTag = Tag::find($this->activeFilters['main_tag_id']);
+            $this->selectedLocationTag = Tag::find($this->activeFilters['main_location_tag_id']);
+        }
+        $this->showFilters = true;
     }
 }

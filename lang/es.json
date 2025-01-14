@@ -332,5 +332,6 @@
     "Create Filter": "Crear filtro",
     "Delete Filter": "Eliminar filtro",
     "Are you sure you want to delete this filter? This action cannot be undone.": "¿Estás seguro de que quieres eliminar este filtro? Esta acción no se puede deshacer.",
-    "You already have a filter with this name.": "Ya tienes un filtro con este nombre."
+    "You already have a filter with this name.": "Ya tienes un filtro con este nombre.",
+    "Saved Filters": "Filtros guardados"
 }

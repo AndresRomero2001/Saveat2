@@ -23,12 +23,6 @@ class Filters extends Component
         $this->filters = Auth::user()->filters()->get();
     }
 
-    public function deleteFilter($filterId)
-    {
-        Filter::findOrFail($filterId)->delete();
-        $this->loadFilters();
-    }
-
     public function render()
     {
         return view('livewire.filters');

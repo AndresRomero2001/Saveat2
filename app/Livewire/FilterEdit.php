@@ -35,6 +35,8 @@ class FilterEdit extends Component
 
     public function mount(Filter $filter)
     {
+        $this->authorize('view', $filter);
+
         $this->filter = $filter;
         $this->name = $filter->name;
         $this->rating = $filter->rating;
@@ -54,6 +56,7 @@ class FilterEdit extends Component
 
     public function updateFilter()
     {
+        $this->authorize('update', $this->filter);
         $this->validate([
             'name' => [
                 'required',
@@ -78,6 +81,7 @@ class FilterEdit extends Component
 
     public function deleteFilter()
     {
+        $this->authorize('delete', $this->filter);
         $this->filter->delete();
         return redirect()->route('filters.index');
     }

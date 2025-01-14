@@ -24,9 +24,8 @@ class Filter extends Component
 
     public function applyFilter()
     {
-        return redirect()->route('restaurants.index', [
-            'apply_filter' => $this->filter->id
-        ]);
+        session()->flash('apply_filter_id', $this->filter->id);
+        return redirect()->route('restaurants.index');
     }
 
     public function render()

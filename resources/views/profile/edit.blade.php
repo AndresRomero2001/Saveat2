@@ -10,12 +10,6 @@
 
             <div class="p-4 bg-white shadow rounded-lg">
                 <div class="max-w-xl">
-                    <livewire:default-filters />
-                </div>
-            </div>
-
-            <div class="p-4 bg-white shadow rounded-lg">
-                <div class="max-w-xl">
                     @include('profile.partials.update-profile-information-form')
                 </div>
             </div>

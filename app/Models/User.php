@@ -48,20 +48,6 @@ class User extends Authenticatable
         ];
     }
 
-    protected static function booted()
-    {
-        static::created(function ($user) {
-            UserDefaultFilter::create([
-                'user_id' => $user->id,
-                'rating' => 0,
-                'price_ranges' => [],
-                'tag_ids' => [],
-                'main_tag_id' => null,
-                'main_location_tag_id' => null
-            ]);
-        });
-    }
-
     public function filters()
     {
         return $this->hasMany(Filter::class);

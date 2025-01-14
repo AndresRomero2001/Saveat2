@@ -5,8 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RestaurantController;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\FilterController;
-use App\Http\Controllers\Livewire;
-use App\Livewire\FilterEdit;
+
 Route::middleware(['web', 'auth', 'verified'])->group(function () {
     Route::get('/', [RestaurantController::class, 'index'])->name('restaurants.index');
 

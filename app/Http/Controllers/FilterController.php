@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Tag;
-use Illuminate\Http\Request;
 use Illuminate\View\View;
 use App\Models\Filter;
 class FilterController extends Controller
@@ -21,6 +20,7 @@ class FilterController extends Controller
 
     public function edit(Filter $filter): View
     {
+        $this->authorize('update', $filter);
         return view('filters.edit', compact('filter'));
     }
 }
